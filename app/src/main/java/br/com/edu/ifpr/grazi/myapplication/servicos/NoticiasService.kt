@@ -18,7 +18,7 @@ interface NoticiasService {
         pais: String = "br",
 
         @Query("apiKey")
-        apiKey: String = ""
+        apiKey: String = "bbe48466499045bea63b3a6bd8914492"
 
     ): Call<ResultadoNoticias>
 }
