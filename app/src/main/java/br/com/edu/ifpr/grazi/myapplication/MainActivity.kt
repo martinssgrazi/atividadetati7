@@ -10,7 +10,9 @@ import br.com.edu.ifpr.grazi.myapplication.entidades.Noticia
 import br.com.edu.ifpr.grazi.myapplication.entidades.ResultadoNoticias
 import br.com.edu.ifpr.grazi.myapplication.servicos.NoticiasService
 import br.com.edu.ifpr.grazi.myapplication.ui.NoticiaAdapter
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item_noticia_compacto.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,19 +32,29 @@ class MainActivity : AppCompatActivity() {
         configuraRetrofit()
         carregaDados()
 
-        resources.configuration.locales[0].country.toLowerCase() // "br" "ar"
+
+
+        btBusca.setOnClickListener{
+            carregaDados()
+        }
+
+
     }
 
     fun configuraRetrofit() {
-        retrofit = Retrofit.Builder()
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+        val retrofit = Retrofit.Builder()
             .baseUrl("https://newsapi.org/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         service = retrofit.create(NoticiasService::class.java)
     }
 
+
+    @SuppressLint("NewApi")
     fun carregaDados() {
-        service.getNews("").enqueue(object : Callback<ResultadoNoticias> {
+        val country = resources.configuration.locales[0].country.toLowerCase() // "br" "ar"
+        service.getNews(txtBusca.text.toString(), country).enqueue(object : Callback<ResultadoNoticias> {
             override fun onFailure(call: Call<ResultadoNoticias>, t: Throwable) {
                Log.e("grazi", t.message, t)
             }
@@ -54,22 +66,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-
-//        service.buscaTodas().enqueue(object : Callback<List<Tarefa>> {
-//            override fun onFailure(call: Call<List<Tarefa>>, t: Throwable) {
-//
-//            }
-//
-//            override fun onResponse(
-//                call: Call<List<Tarefa>>,
-//                response: Response<List<Tarefa>>
-//            ) {
-//                val tarefas = response.body()
-//                if (tarefas != null)
-//                    configuraRecyclerView(tarefas)
-//            }
-//
-//        })
     }
 
     fun configuraRecyclerView(noticias: List<Noticia>) {

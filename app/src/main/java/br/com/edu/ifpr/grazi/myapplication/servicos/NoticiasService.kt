@@ -12,7 +12,7 @@ interface NoticiasService {
     fun getNews(
 
         @Query("q")
-        busca:String,
+        busca: String,
 
         @Query("country")
         pais: String = "br",

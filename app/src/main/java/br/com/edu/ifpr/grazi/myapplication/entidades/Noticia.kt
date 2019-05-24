@@ -1,6 +1,8 @@
 package br.com.edu.ifpr.grazi.myapplication.entidades
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+import java.util.*
 
 
 class Noticia(
@@ -10,10 +12,12 @@ class Noticia(
         var titulo: String,
         @SerializedName("description")
         var descricao: String,
+        @SerializedName("url")
         var url: String,
         var urlToImage: String,
         @SerializedName("publishedAt")
-        var publicado: String,
+        var publicado: Date,
         @SerializedName("content")
         var conteudo: String
+
     )
